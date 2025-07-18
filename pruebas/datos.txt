@@ -1,0 +1,23 @@
+[parametros]
+plantilla=mem2024p.docx
+salida=memoria_7001.docx
+
+[marcadores]
+#empresa#=DIAGRAM SOFTWARE EUROPA S.L.
+#CIF#=B02028702
+#domicilio social#=CALLE MAYOR, 1
+#poblacion#=ALBACETE
+#provincia#=ALBACETE
+#tipo sociedad#=SOCIEDAD LIMITADA
+#actividad 1#=CONFECCION DE PRENDAS DE VESTIR DE TODA CLASE. VENTA DE EQUIPOS INFORMATICOS. PRESTACION DE SERVICIOS DE ASESORIA
+#ejer0#=2024
+#ejer1#=2023
+#C1#C1#=1.500,00
+
+[tablas]
+#tabla1#=Entidad concedente
+JUNTA DE COMUNIDADES DE CASTILLA LA MANCHA|ADMINISTRACION AUTONOMICA|100.000,00|SUBVENCION
+DELEGACION DEL GOBIERNO DE ARAGON|ADMINISTRACION LOCAL|50.000,00|DONACION
+#tabla2#=Número medio de personas empleadas en el curso del ejercicio
+Total empleo medio del ejercicio|1,50|1,75
+Otra fila mas de pruebas|14,00|12,33
