@@ -1,0 +1,32 @@
+- El guion esta dividido en secciones:
+	* [parametros]	Seccion para indicar los parametros de entrada (de momento solo dos):
+		- plantilla=	Fichero con la plantilla.docx a procesar
+		- salida=		Nombre del fichero en el que se grabrara el resultado de la fusion
+		
+	* [marcadores]	Seccion para incluir todos los marcadores que se sustituiran en la plantilla, poniendo el
+					nombre del marcador entre el simbolo '#' seguido del signo de igual '=' y a continuacion 
+					el texto que se sustituira.
+					Ejemplo: #marcador#=Texto a sustituir
+					Nota: se pueden poner espacios en el nombre del marcador, pero es aconsejable
+					poner el guion bajo para que este unido en una palabra.
+					Nota 2: Por la forma de trabajar de Word, aunque visualmente el marcador se pueda 
+					ver entero, internamente puede estar dividido en dos o mas partes (son ramas de un xml)
+					y fallara el reemplazo. En esos casos, borrar completamente el marcador insertado, y poner
+					uno nuevo con un nombre diferente. En casos extremos, borrar completamente el parrafo que 
+					contiene el marcador y volverlo a escribir de nuevo.
+	* [tablas]		Seccion para indicar los textos a insertar en las tablas que pueda haber en el documento.
+					Las tablas deben tener un encabezado y el texto de la primera celda sera el que se utilice 
+					para localizarla entre todas. La primera fila se utilizara para configurar el tipo de fuente 
+					y demas formatos (negrita, alineacion, etc) y en todas las celdas de esa fila debe haber algun 
+					texto (no pueden estar vacias)
+					Para añadir una tabla, en la primera linea debe indicarse un nombre entre el simbolo '#' seguido
+					del signo igual '=', y a continuacion el texto que se buscara en la primera celda del encabezado.
+					La siguientes lineas seran los datos que deben ir en cada celda separados con el simbolo '|'
+					Ejemplo: #tabla1#=Entidad financiera
+							 BBVA|HIPOTECARIO|100.000,00
+							 LA CAIXA|PERSONAL|75.000,00
+					
+
+
+- En las tablas en las que se quiera insertar informacion, se debe poner algun texto 
+  en todas las celdas (no pueden estar vacias). Por ejemplo poner "campo1", "campo2", "campoX"

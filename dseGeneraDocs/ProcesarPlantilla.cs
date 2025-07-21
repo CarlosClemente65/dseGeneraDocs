@@ -16,9 +16,9 @@ namespace dseGeneraDocs
         private string ficheroSalida;
 
         private Parametros parametros;
-        private Opciones datosGuion;
+        private DatosGuion datosGuion;
 
-        public ProcesarPlantilla(Opciones opciones)
+        public ProcesarPlantilla(DatosGuion opciones)
         {
             datosGuion = opciones;
             parametros = opciones.Parametros;
@@ -163,6 +163,72 @@ namespace dseGeneraDocs
             documento.MainDocumentPart.Document.Save();
         }
 
+
+        public void ReemplazarCampos()
+        {
+            var marcadores = datosGuion.Marcadores;
+            var body = documento.MainDocumentPart.Document.Body;
+
+            // Recorremos todos los campos FieldCode del documento
+            var campos = body.Descendants<FieldCode>().Where(
+                f => f.Text.StartsWith(" MERGEFIELD")).ToList();
+
+            foreach(var campo in campos)
+            {
+                // Obtenemos el nombre del campo
+                var nombreCampo = campo.Text.Replace(" MERGEFIELD", "").Trim();
+
+                if(marcadores.ContainsKey(nombreCampo))
+                {
+                    var valor = marcadores[nombreCampo];
+
+                    // Buscamos el Run completo que contiene este FieldCode
+                    Run runFieldCode = campo.Ancestors<Run>().FirstOrDefault();
+
+                    if(runFieldCode != null)
+                    {
+                        // Buscamos los elementos del campo: FieldChar (Begin), FieldCode, FieldChar (Separate), texto, FieldChar (End)
+                        var siguienteRun = runFieldCode.NextSibling<Run>();
+
+                        // Eliminamos todos los elementos relacionados al campo
+                        List<OpenXmlElement> elementosAEliminar = new List<OpenXmlElement>();
+
+                        bool dentroDelCampo = false;
+
+                        for(var run = runFieldCode.PreviousSibling<Run>(); run != null; run = run.PreviousSibling<Run>())
+                        {
+                            if(run.Descendants<FieldChar>().Any(fc => fc.FieldCharType == FieldCharValues.Begin))
+                            {
+                                elementosAEliminar.Insert(0, run);
+                                break;
+                            }
+                            elementosAEliminar.Insert(0, run);
+                        }
+
+                        for(var run = runFieldCode; run != null; run = run.NextSibling<Run>())
+                        {
+                            elementosAEliminar.Add(run);
+
+                            if(run.Descendants<FieldChar>().Any(fc => fc.FieldCharType == FieldCharValues.End))
+                                break;
+                        }
+
+                        // Insertamos un nuevo texto en lugar del campo
+                        var runReemplazo = new Run(new Text(valor));
+
+                        // Insertamos el nuevo texto justo después del último elemento eliminado
+                        var ultimo = elementosAEliminar.Last();
+                        ultimo.Parent.InsertAfter(runReemplazo, ultimo);
+
+                        // Eliminamos el campo
+                        foreach(var elem in elementosAEliminar)
+                            elem.Remove();
+                    }
+                }
+            }
+
+            documento.MainDocumentPart.Document.Save();
+        }
         public void GuardarDocumento()
         {
             // Se guarda el documento
