@@ -1,7 +1,9 @@
 ﻿using System;
-using Word = Microsoft.Office.Interop.Word;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
+using Microsoft.Office.Interop.Word;
+using Word = Microsoft.Office.Interop.Word;
 
 
 namespace dseGeneraDocs
@@ -50,22 +52,53 @@ namespace dseGeneraDocs
                     throw new InvalidOperationException("Documento no abierto. Llama primero a AbrirDocumento().");
                 }
 
-                // Procesado de todos los marcadores del guion
-                foreach(var marcador in datosGuion.Marcadores)
-                {
-                    Word.Find findObject = instanciaWord.Selection.Find; // Crea el proceso para hacer la busqueda
-                    findObject.ClearFormatting(); // Limpia el formato de busqueda para evitar que pueda haber formatos de negrita que impidan encontrar los textos.
-                    findObject.Text = marcador.Key; // Texto a buscar en el documento
-                    findObject.Replacement.ClearFormatting(); // Limpia los valores de formato en el proceso de reemplazo para que se sustituya con el formato que tenga en el documento
-                    findObject.Replacement.Text = marcador.Value; // Texto por el que sera reemplazado el marcador
 
-                    findObject.Execute(Replace: Word.WdReplace.wdReplaceAll); // Ejecuta el proceso de reemplado en todo el documento.
+                // Recorre cada seccion del documento para procesar los marcadores de encabezados, pies de pagina y cuerpo del documento
+                foreach(Word.Section seccion in documento.Sections)
+                {
+                    // Procesa los encabezados
+                    foreach(Word.HeaderFooter encabezado in seccion.Headers)
+                    {
+                        if(encabezado.Exists)
+                        {
+                            // Procesa los marcadores de cada encabezado
+                            ReemplazarMarcadores(encabezado.Range, datosGuion.Marcadores);
+                        }
+                    }
+
+                    // Procesa los pie de pagina
+                    foreach(Word.HeaderFooter pie in seccion.Footers)
+                    {
+                        if(pie.Exists)
+                        {
+                            // Procesa los marcadores de cada pie de pagina
+                            ReemplazarMarcadores(pie.Range, datosGuion.Marcadores);
+                        }
+                    }
+
+                    // Procesa el cuerpo del documento
+                    ReemplazarMarcadores(documento.Content, datosGuion.Marcadores);
                 }
             }
             catch(Exception ex)
             {
                 // Si hay un error se lanza una excepcion para generar un fichero de salida
                 throw new Exception("Error al procesar marcadores: " + ex.Message);
+            }
+        }
+
+        private void ReemplazarMarcadores(Word.Range rango, Dictionary<string, string> marcadores)
+        {
+            // Procesado de todos los marcadores del guion
+            foreach(var marcador in datosGuion.Marcadores)
+            {
+                Word.Find findObject = rango.Find; // Crea el proceso para hacer la busqueda
+                findObject.ClearFormatting(); // Limpia el formato de busqueda para evitar que pueda haber formatos de negrita que impidan encontrar los textos.
+                findObject.Text = marcador.Key; // Texto a buscar en el documento
+                findObject.Replacement.ClearFormatting(); // Limpia los valores de formato en el proceso de reemplazo para que se sustituya con el formato que tenga en el documento
+                findObject.Replacement.Text = marcador.Value; // Texto por el que sera reemplazado el marcador
+
+                findObject.Execute(Replace: Word.WdReplace.wdReplaceAll); // Ejecuta el proceso de reemplado en todo el documento.
             }
         }
 

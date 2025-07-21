@@ -1,6 +1,6 @@
 [parametros]
-plantilla=C:\Programacion\c#\dseGeneraDocs\pruebas\mem2024p.docx
-salida=C:\Programacion\c#\dseGeneraDocs\pruebas\memoria_7001.docx
+plantilla=d:\Programacion\c#\dseGeneraDocs\pruebas\mem2024p.docx
+salida=d:\Programacion\c#\dseGeneraDocs\pruebas\memoria_7001.docx
 pdf=SI
 
 [marcadores]
@@ -18,8 +18,8 @@ pdf=SI
 #ejer1#=2023
 #poblacion#=Albacete
 #registro#=ALBACETE
-#fecha1#=01.05.2020
-#datosregistro#=Tomo 1, libro 14, hoja 22
+#fecha_inscripcion#=01.05.2020
+#datos_inscripcion#=Tomo 1, libro 14, hoja 22, folio 33
 #objeto social#=La creacion de aplicaciones web. Alquiler de todo tipo de inmuebles. La prestacion de servicios informaticos, financieros y demas.
 #contabilidad#=Plan general de contabilidad
 #C1#C1#=Casilla 1-1
