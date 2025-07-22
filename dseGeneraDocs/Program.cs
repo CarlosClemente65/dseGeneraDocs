@@ -17,7 +17,14 @@ namespace dseGeneraDocs
         {
             string pruebas = "Word"; // Sirve para ejecutar con las librerias propias de Word o con las de Open XML (lo dejo por si fuera necesario en un futuro modificar algo).
 
-            string guion = args[0];
+            // Clave de ejecucion del programa
+            string claveds = args[0];
+            if(claveds != "ds123456")
+            {
+                GrabarSalida("salida.txt", "Clave de ejecucion incorrecta");
+                Environment.Exit(0);
+            }
+            string guion = args[1];
 
             if(File.Exists(guion)) // Si el fichero del guion se encuentra se inicia el proceso.
             {

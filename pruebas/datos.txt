@@ -1,7 +1,7 @@
 [parametros]
-plantilla=d:\Programacion\c#\dseGeneraDocs\pruebas\mem2024p.docx
-salida=d:\Programacion\c#\dseGeneraDocs\pruebas\memoria_7001.docx
-pdf=SI
+plantilla=c:\Programacion\c#\dseGeneraDocs\pruebas\mem2024p.docx
+salida=c:\Programacion\c#\dseGeneraDocs\pruebas\memoria_7001.docx
+
 
 [marcadores]
 #EMPRESA#=DIAGRAM SOFTWARE EUROPA S.L.

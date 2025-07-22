@@ -1,7 +1,11 @@
-- El guion esta dividido en secciones:
+- Para ejecutar el programa se debe pasar como parametros la clave de ejecucion de Diagram seguido del nombre del fichero con el guion de datos
+	* dsegeneradocs.exe ds123456 guion.txt
+
+- El guion esta dividido en secciones, y debajo de cada una se incluyen los datos correspondientes:
 	* [parametros]	Seccion para indicar los parametros de entrada (de momento solo dos):
 		- plantilla=	Fichero con la plantilla.docx a procesar
 		- salida=		Nombre del fichero en el que se grabrara el resultado de la fusion
+		- PDF=SI		Indica que se genere tambien el documento en PDF ademas del Word
 		
 	* [marcadores]	Seccion para incluir todos los marcadores que se sustituiran en la plantilla, poniendo el
 					nombre del marcador entre el simbolo '#' seguido del signo de igual '=' y a continuacion 
@@ -9,16 +13,12 @@
 					Ejemplo: #marcador#=Texto a sustituir
 					Nota: se pueden poner espacios en el nombre del marcador, pero es aconsejable
 					poner el guion bajo para que este unido en una palabra.
-					Nota 2: Por la forma de trabajar de Word, aunque visualmente el marcador se pueda 
-					ver entero, internamente puede estar dividido en dos o mas partes (son ramas de un xml)
-					y fallara el reemplazo. En esos casos, borrar completamente el marcador insertado, y poner
-					uno nuevo con un nombre diferente. En casos extremos, borrar completamente el parrafo que 
-					contiene el marcador y volverlo a escribir de nuevo.
 	* [tablas]		Seccion para indicar los textos a insertar en las tablas que pueda haber en el documento.
-					Las tablas deben tener un encabezado y el texto de la primera celda sera el que se utilice 
-					para localizarla entre todas. La primera fila se utilizara para configurar el tipo de fuente 
-					y demas formatos (negrita, alineacion, etc) y en todas las celdas de esa fila debe haber algun 
-					texto (no pueden estar vacias)
+					Las tablas deben tener un encabezado y el texto de la primera celda (A1) sera el que se utilice 
+					para localizarla entre todas. 
+					Tiene que haber al menos una fila despues del encabezado que debe tener el formato que se quiere
+					aplicar a cada una de las celdas (fuente, negrita, alineacion, etc) y que se utilizara para insertar
+					todas las filas que sean necesarias segun los datos del guion. 
 					Para añadir una tabla, en la primera linea debe indicarse un nombre entre el simbolo '#' seguido
 					del signo igual '=', y a continuacion el texto que se buscara en la primera celda del encabezado.
 					La siguientes lineas seran los datos que deben ir en cada celda separados con el simbolo '|'
@@ -26,7 +26,43 @@
 							 BBVA|HIPOTECARIO|100.000,00
 							 LA CAIXA|PERSONAL|75.000,00
 					
-
-
-- En las tablas en las que se quiera insertar informacion, se debe poner algun texto 
-  en todas las celdas (no pueden estar vacias). Por ejemplo poner "campo1", "campo2", "campoX"
+- Ejemplo de guion:
+	[parametros]
+	plantilla1=c:\Programacion\c#\dseGeneraDocs\pruebas\mem2024p.docx
+	salida1=c:\Programacion\c#\dseGeneraDocs\pruebas\memoria_7001.docx
+	plantilla=C:\Borrar\cuentas\mem2024p.docx
+	salida=C:\Borrar\cuentas\memoria_7001.docx
+	
+	[marcadores]
+	#EMPRESA#=DIAGRAM SOFTWARE EUROPA S.L.
+	#EJERCICIO#=2024
+	#empresa#=DIAGRAM SOFTWARE EUROPA S.L.
+	#CIF#=B02028702
+	#domicilio social#=CALLE MAYOR, 1
+	#ciudad#=ALBACETE
+	#C1#C1#=Casilla 1-1
+	#C1#C14#=Casilla 1-2
+	#C1#C27#=Casilla 1-3
+	#C1#C2#=Casilla 2-1
+	#C1#C15#=Casilla 2-2
+	#C1#C28#=Casilla 2-3
+	#C1#C40#=Casilla 3-1
+	#C1#C43#=Casilla 3-2
+	#C1#C46#=Casilla 3-3
+	#C1#C3#=Casilla 4-1
+	#C1#C16#=Casilla 4-2
+	#C1#C29#=Casilla 4-3
+	
+	[tablas]
+	#tabla1#=Entidad concedente
+	JUNTA DE COMUNIDADES DE CASTILLA LA MANCHA|ADMINISTRACION AUTONOMICA|100.000,00|SUBVENCION
+	DELEGACION DEL GOBIERNO DE ARAGON|ADMINISTRACION LOCAL|50.000,00|DONACION
+	#tabla2#=Número medio de personas empleadas en el curso del ejercicio
+	Total empleo medio del ejercicio|1,50|1,75
+	Otra fila mas de pruebas|14,00|12,33
+	Una tercera fila de pruebas|2,22|1,15
+	#tabla3#=Entidad financiera
+	BBVA2|HIPOTECARIO NORMAL|100.123,45
+	LA CAIXA2|PERSONAL SENCILLO|75.111,22
+	SANTANDER|AUTOCONCEDIDO|12.333,44
+	
